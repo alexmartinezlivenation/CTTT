@@ -2,36 +2,20 @@ package map;
 
 public class Map {
 	private String[] mapField;
-
+	
 	public void initializeMap(int size) {
 		if (size == 0) {
 			mapField = new String[0];
 			return;
 		}
-		mapField = new String[size * 2 - 1];
 		
-		int baseRowValue;
-		
-		for (int row=0; row < mapField.length; row++) {
-			if (row % 2 == 0) {
-				baseRowValue = (row/2)*size;
-				mapField[row] = " " + Integer.toString(baseRowValue) + " ";
-				
-				for (int column=1; column < size; column++) {
-					mapField[row] = mapField[row] + "|" + " " + Integer.toString(baseRowValue + column) + " ";
-				}
-			}
-			else {
-				mapField[row] = "-";
-				for (int column=1; column<mapField[row-1].length(); column++) {
-					mapField[row] = mapField[row] + "-";
-				}
-			}
-			
+		mapField = new String[size*size];
+		for (int populatedValue=0; populatedValue<mapField.length; populatedValue++) {
+			mapField[populatedValue] = Integer.toString(populatedValue);
 		}
 	}
 	
-	public boolean updateMap(int position, String player) {
+	/*public boolean updateMap(int position, String player) {
 		int mapLength = mapField.length;
 		
 		//check if out of bounds
@@ -53,6 +37,16 @@ public class Map {
 		
 		
 		return true;
+	}*/
+	
+	public boolean updateMap(int position, String player) {
+		if ((position>=0) && position < mapField.length) {
+			if (mapField[position].equals(Integer.toString(position))) {
+				mapField[position] = player;
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public String[] getMapField() {
