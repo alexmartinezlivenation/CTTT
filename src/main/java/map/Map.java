@@ -15,30 +15,6 @@ public class Map {
 		}
 	}
 	
-	/*public boolean updateMap(int position, String player) {
-		int mapLength = mapField.length;
-		
-		//check if out of bounds
-		if((mapLength == 0) || (position >= (mapLength*2 - 1))) {
-			return false;
-		}
-
-		//set value
-		String strPosition = Integer.toString(position);
-		int rowSize = (mapField[0].length() + 1)/4;
-		int row = (position/rowSize) * 2;  //the multiplier accounts for dashed lines
-		
-		if (mapField[row].contains(strPosition)) {
-			mapField[row] = mapField[row].replace(strPosition, player);
-		}
-		else {
-			return false;
-		}
-		
-		
-		return true;
-	}*/
-	
 	public boolean updateMap(int position, String player) {
 		if ((position>=0) && position < mapField.length) {
 			if (mapField[position].equals(Integer.toString(position))) {

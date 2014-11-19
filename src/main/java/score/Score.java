@@ -3,6 +3,8 @@ package score;
 import map.Map;
 
 public class Score {
+	private int turnCounter;
+	
 	public boolean isWinConditionMet(Map map) {
 		String[] grid = map.getMapField();
 		
@@ -32,5 +34,22 @@ public class Score {
 		}
 		
 		return false;
+	}
+
+	public int getTurnCounter() {
+		return turnCounter;
+	}
+
+	public void setTurnCounter(int turnCounter) {
+		this.turnCounter = turnCounter;
+	}
+	
+	public boolean isTie(Map map) {
+		if (turnCounter == map.getMapField().length) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 }

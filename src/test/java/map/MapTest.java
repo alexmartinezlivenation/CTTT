@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import player.Move;
+
 public class MapTest {
 	Map testMap = new Map();
 	
@@ -33,11 +35,11 @@ public class MapTest {
 		assertFalse(testMap.updateMap(1, "x"));
 		
 		testMap.initializeMap(1);
-		assertTrue(testMap.updateMap(0, "x"));
+		assertTrue(testMap.updateMap(0,"x"));
 		assertArrayEquals(new String[] {"x"}, testMap.getMapField());
 		
 		testMap.initializeMap(1);
-		assertFalse(testMap.updateMap(1, "x"));
+		assertFalse(testMap.updateMap(1,"x"));
 		assertArrayEquals(new String[] {"0"}, testMap.getMapField());
 		
 		testMap.initializeMap(3);
@@ -79,8 +81,8 @@ public class MapTest {
 	@Test
 	public void testUpdateMapOnOccupiedSpace() {
 		testMap.initializeMap(3);
-		testMap.updateMap(1, "x");
-		testMap.updateMap(5, "o");
+		testMap.updateMap(1,"x");
+		testMap.updateMap(5,"o");
 		
 		assertFalse(testMap.updateMap(5,"x"));
 		assertArrayEquals(new String[] {"0","x","2",
@@ -94,9 +96,9 @@ public class MapTest {
 		
 		//Testing larget map
 				testMap.initializeMap(4);
-				testMap.updateMap(6, "o");
+				testMap.updateMap(6,"o");
 				
-				assertFalse(testMap.updateMap(6, "x"));
+				assertFalse(testMap.updateMap(6,"x"));
 				assertArrayEquals(new String[] {"0","1","2","3",
 												"4","5","o","7",
 												"8","9","10","11",

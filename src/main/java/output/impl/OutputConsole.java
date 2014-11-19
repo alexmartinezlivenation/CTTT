@@ -22,15 +22,39 @@ public class OutputConsole implements Output {
 	}
 
 	public void drawMap(Map map) {
-		// TODO Auto-generated method stub
-		for (int lineNumber = 0; lineNumber<map.getMapField().length; lineNumber++) {
-			System.out.println(map.getMapField()[lineNumber]);
+		String[] localMap = map.getMapField();
+	
+		if (localMap.length == 0) {
+			return;
 		}
+	
+		int mapSize = (int) Math.sqrt(localMap.length);
 		
+		String row = " ";
+		
+		for (int position = 0; position < localMap.length; position++) {
+			
+			if (position != 0) {
+				if (position%mapSize == 0) {
+					System.out.println(row);
+					row = "";
+					for (int dashedPosition=0; dashedPosition<(4*mapSize-1); dashedPosition++) {
+						row = row + "-";
+					}
+					System.out.println(row);
+					row = " ";
+				}
+				else {
+					row = row + " | ";
+				}
+			}
+			
+			row = row + localMap[position];
+		}
+		System.out.println(row);
 	}
-
+	
 	public void writeToScreen(String text) {
-		// TODO Auto-generated method stub
 		System.out.println(text);
 	}
 
