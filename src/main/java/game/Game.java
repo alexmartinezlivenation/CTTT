@@ -17,8 +17,7 @@ import map.Map;
 
 
 public class Game {
-	public static void main(String[] args) {
-		
+	public static void main(String[] args) {		
 		Map map = new Map();
 		map.initializeMap(3);
 		
@@ -49,6 +48,8 @@ public class Game {
 		player1.setPersonalSymbol("x");
 		player2.setPersonalSymbol("o");
 		
+		oc.writeToScreen("Choose your fate");
+		
 		while (true) {
 			if (score.isTie(map)) {
 				break;
@@ -62,11 +63,11 @@ public class Game {
 			}
 			oc.clearScreen();
 			oc.drawMap(map);
-			oc.writeToScreen("Choose your fate");
 			if (score.isWinConditionMet(map)) {
 				oc.writeToScreen("Player 1 has won the game!");
 				return;
 			}
+			oc.writeToScreen("Choose your fate");
 			score.setTurnCounter(score.getTurnCounter() + 1);
 			
 			if (score.isTie(map)) {
@@ -81,13 +82,17 @@ public class Game {
 			}
 			oc.clearScreen();
 			oc.drawMap(map);
-			oc.writeToScreen("Choose your fate");
 			if (score.isWinConditionMet(map)) {
 				oc.writeToScreen("Player 2 has won the game!");
 				return;
 			}
+			oc.writeToScreen("Choose your fate");
 			score.setTurnCounter(score.getTurnCounter() + 1);
 		}
+		
+		//System.out.print(ESC + "2J");
+		oc.clearScreen();
+		oc.drawMap(map);
 		oc.writeToScreen("Game is a draw");
 		
 	}
@@ -97,14 +102,6 @@ public class Game {
 		
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		return br.readLine();
-		
-		/*if (gameMode.equals("2")) {
-			oc.clearScreen();
-			return "PVP";
-		}
-		else {
-			oc.clearScreen();
-			return "PVC";
-		}*/
+
 	}
 }

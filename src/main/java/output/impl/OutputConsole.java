@@ -6,6 +6,7 @@ import output.Output;
 public class OutputConsole implements Output {
 
 	public void clearScreen() {
+		final String ESC = "\033[";
 		try {
 			final String os = System.getProperty("os.name");
 			
@@ -14,6 +15,7 @@ public class OutputConsole implements Output {
 			}
 			else {
 				Runtime.getRuntime().exec("clear");
+				System.out.print(ESC + "2J");
 			}
 		}
 		catch (final Exception e) {
