@@ -2,6 +2,7 @@ package map;
 
 public class Map {
 	private String[] mapField;
+	private int mapSize;
 	
 	public void initializeMap(int size) {
 		if (size == 0) {
@@ -13,6 +14,8 @@ public class Map {
 		for (int populatedValue=0; populatedValue<mapField.length; populatedValue++) {
 			mapField[populatedValue] = Integer.toString(populatedValue);
 		}
+		
+		mapSize = size;
 	}
 	
 	public boolean updateMap(int position, String player) {
@@ -32,6 +35,9 @@ public class Map {
 	public void setMapField(String[] mapField) {
 		this.mapField = mapField;
 	}
-	
+
+	public int getMapSize() {
+		return mapSize;
+	}
 	
 }

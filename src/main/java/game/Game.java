@@ -10,6 +10,7 @@ import output.Output;
 import output.impl.OutputConsole;
 import player.AIPlayer;
 import player.ConsolePlayer;
+import player.DifficultAIPlayer;
 import player.Move;
 import player.Player;
 import score.Score;
@@ -29,7 +30,7 @@ public class Game {
 		String gameMode = "";
 		
 		try {
-			gameMode = initializeGame(oc);
+			gameMode = initializeGame(oc,"Please choose a game mode\n1.  Player vs. Computer\n2.  Player vs. Player");
 		}
 		catch (IOException e) {
 			e.printStackTrace();
@@ -39,11 +40,23 @@ public class Game {
 			player2 = new ConsolePlayer();
 		}
 		else {
-			player2 = new AIPlayer();
+			try {
+				gameMode = initializeGame(oc,"Please choose a difficulty\n1.  Difficult\n2.  Easy");
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+			}
+			if (gameMode.equals("2")) {
+				player2 = new AIPlayer();
+			}
+			else {
+				player2 = new DifficultAIPlayer();
+				//player2.setReferenceMap(map);
+			}
 		}
 		
 		oc.drawMap(map);
-		Move move = new Move();
+		//Move move = new Move();
 		
 		player1.setPersonalSymbol("x");
 		player2.setPersonalSymbol("o");
@@ -51,6 +64,24 @@ public class Game {
 		oc.writeToScreen("Choose your fate");
 		
 		while (true) {
+			if (score.isTie(map)) {
+				break;
+			}
+			if (!continueGame(player1, oc, map, score)) {
+				oc.writeToScreen("Player 1 has won the game!");
+				return;
+			}
+			
+			if (score.isTie(map)) {
+				break;
+			}
+			if (!continueGame(player2, oc, map, score)) {
+				oc.writeToScreen("Player 2 has won the game!");
+				return;
+			}
+		}
+		
+		/*while (true) {
 			if (score.isTie(map)) {
 				break;
 			}
@@ -88,17 +119,33 @@ public class Game {
 			}
 			oc.writeToScreen("Choose your fate");
 			score.setTurnCounter(score.getTurnCounter() + 1);
-		}
+		}*/
 		
-		//System.out.print(ESC + "2J");
 		oc.clearScreen();
 		oc.drawMap(map);
 		oc.writeToScreen("Game is a draw");
 		
 	}
 	
-	public static String initializeGame(Output oc) throws IOException {
-		oc.writeToScreen("Please choose a game mode\n1.  Player vs. Computer\n2.  Player vs. Player");
+	private static boolean continueGame(Player player, Output oc, Map map, Score score) {
+		
+		while (!player.makeMove(map)) {
+			oc.clearScreen();
+			oc.drawMap(map);
+			oc.writeToScreen("Choose your fate");
+		}
+		oc.clearScreen();
+		oc.drawMap(map);
+		if (score.isWinConditionMet(map)) {
+			return false;
+		}
+		oc.writeToScreen("Choose your fate");
+		score.setTurnCounter(score.getTurnCounter() + 1);
+		return true;
+	}
+	
+	private static String initializeGame(Output oc, String message) throws IOException {
+		oc.writeToScreen(message);
 		
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		return br.readLine();

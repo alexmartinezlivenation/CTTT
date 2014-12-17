@@ -1,11 +1,13 @@
 package player;
 
+import map.Map;
+
 public class BrowserPlayer implements Player {
 
 	@Override
-	public void makeMove(Move move) {
+	public boolean makeMove(Map map) {
 		// TODO Auto-generated method stub
-		
+		return true;
 	}
 
 	@Override
