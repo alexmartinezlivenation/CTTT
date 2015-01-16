@@ -1,10 +1,10 @@
 package player;
 
-import map.Map;
+import map.MapViewer;
 
 public interface Player {
 	//public void makeMove(Move move);
-	public boolean makeMove(Map map);
+	public boolean makeMove(MapViewer map);
 
 	public void setPersonalSymbol(String string);
 }

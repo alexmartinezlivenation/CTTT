@@ -11,16 +11,18 @@ import output.impl.OutputConsole;
 import player.AIPlayer;
 import player.ConsolePlayer;
 import player.DifficultAIPlayer;
-import player.Move;
 import player.Player;
 import score.Score;
 import map.Map;
+import map.MapViewer;
 
 
 public class Game {
 	public static void main(String[] args) {		
 		Map map = new Map();
+		MapViewer mapViewer = new MapViewer();
 		map.initializeMap(3);
+		mapViewer.setViewedMap(map);
 		
 		Score score = new Score();
 		
@@ -55,7 +57,7 @@ public class Game {
 			}
 		}
 		
-		oc.drawMap(map);
+		oc.drawMap(mapViewer);
 		//Move move = new Move();
 		
 		player1.setPersonalSymbol("x");
@@ -64,70 +66,30 @@ public class Game {
 		oc.writeToScreen("Choose your fate");
 		
 		while (true) {
-			if (score.isTie(map)) {
+			if (score.isTie(mapViewer)) {
 				break;
 			}
-			if (!continueGame(player1, oc, map, score)) {
+			if (!continueGame(player1, oc, mapViewer, score)) {
 				oc.writeToScreen("Player 1 has won the game!");
 				return;
 			}
 			
-			if (score.isTie(map)) {
+			if (score.isTie(mapViewer)) {
 				break;
 			}
-			if (!continueGame(player2, oc, map, score)) {
+			if (!continueGame(player2, oc, mapViewer, score)) {
 				oc.writeToScreen("Player 2 has won the game!");
 				return;
 			}
 		}
 		
-		/*while (true) {
-			if (score.isTie(map)) {
-				break;
-			}
-			player1.makeMove(move);
-			while (!map.updateMap(Integer.parseInt(move.getPosition()), move.getPlayer())) {
-				oc.clearScreen();
-				oc.drawMap(map);
-				oc.writeToScreen("Choose your fate");
-				player1.makeMove(move);
-			}
-			oc.clearScreen();
-			oc.drawMap(map);
-			if (score.isWinConditionMet(map)) {
-				oc.writeToScreen("Player 1 has won the game!");
-				return;
-			}
-			oc.writeToScreen("Choose your fate");
-			score.setTurnCounter(score.getTurnCounter() + 1);
-			
-			if (score.isTie(map)) {
-				break;
-			}
-			player2.makeMove(move);
-			while(!map.updateMap(Integer.parseInt(move.getPosition()), move.getPlayer())) {
-				oc.clearScreen();
-				oc.drawMap(map);
-				oc.writeToScreen("Choose your fate");
-				player2.makeMove(move);
-			}
-			oc.clearScreen();
-			oc.drawMap(map);
-			if (score.isWinConditionMet(map)) {
-				oc.writeToScreen("Player 2 has won the game!");
-				return;
-			}
-			oc.writeToScreen("Choose your fate");
-			score.setTurnCounter(score.getTurnCounter() + 1);
-		}*/
-		
 		oc.clearScreen();
-		oc.drawMap(map);
+		oc.drawMap(mapViewer);
 		oc.writeToScreen("Game is a draw");
 		
 	}
 	
-	private static boolean continueGame(Player player, Output oc, Map map, Score score) {
+	private static boolean continueGame(Player player, Output oc, MapViewer map, Score score) {
 		
 		while (!player.makeMove(map)) {
 			oc.clearScreen();

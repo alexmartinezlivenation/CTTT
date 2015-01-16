@@ -1,11 +1,11 @@
 package player;
 
-import map.Map;
+import map.MapViewer;
 
 public class BrowserPlayer implements Player {
 
 	@Override
-	public boolean makeMove(Map map) {
+	public boolean makeMove(MapViewer map) {
 		// TODO Auto-generated method stub
 		return true;
 	}

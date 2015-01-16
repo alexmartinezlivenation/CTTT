@@ -2,23 +2,14 @@ package player;
 
 import java.util.Scanner;
 
-import map.Map;
+import map.MapViewer;
 
 public class ConsolePlayer implements Player {
 
 	private String personalSymbol;
 	private Move move;
 	
-	/*public void makeMove(Move move) {
-		String input;
-		Scanner in = new Scanner(System.in);
-		input = in.nextLine();
-		
-		move.setPlayer(personalSymbol);
-		move.setPosition(input);
-	}*/
-	
-	public boolean makeMove(Map map) {
+	public boolean makeMove(MapViewer map) {
 		move = new Move();
 		String input;
 		Scanner in = new Scanner(System.in);

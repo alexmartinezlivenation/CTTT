@@ -1,8 +1,12 @@
 package map;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Map {
 	private String[] mapField;
 	private int mapSize;
+	private List<String> emptySpaces;
 	
 	public void initializeMap(int size) {
 		if (size == 0) {
@@ -11,8 +15,10 @@ public class Map {
 		}
 		
 		mapField = new String[size*size];
+		emptySpaces = new ArrayList<String>();
 		for (int populatedValue=0; populatedValue<mapField.length; populatedValue++) {
 			mapField[populatedValue] = Integer.toString(populatedValue);
+			emptySpaces.add(mapField[populatedValue]);
 		}
 		
 		mapSize = size;
@@ -22,6 +28,7 @@ public class Map {
 		if ((position>=0) && position < mapField.length) {
 			if (mapField[position].equals(Integer.toString(position))) {
 				mapField[position] = player;
+				emptySpaces.remove(Integer.toString(position));
 				return true;
 			}
 		}
@@ -38,6 +45,10 @@ public class Map {
 
 	public int getMapSize() {
 		return mapSize;
+	}
+	
+	public List<String> getEmptySpaces() {
+		return emptySpaces;
 	}
 	
 }

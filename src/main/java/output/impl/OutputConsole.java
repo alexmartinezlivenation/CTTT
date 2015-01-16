@@ -1,6 +1,6 @@
 package output.impl;
 
-import map.Map;
+import map.MapViewer;
 import output.Output;
 
 public class OutputConsole implements Output {
@@ -23,7 +23,7 @@ public class OutputConsole implements Output {
 		}
 	}
 
-	public void drawMap(Map map) {
+	public void drawMap(MapViewer map) {
 		String[] localMap = map.getMapField();
 	
 		if (localMap.length == 0) {

@@ -1,11 +1,11 @@
 package score;
 
-import map.Map;
+import map.MapViewer;
 
 public class Score {
 	private int turnCounter;
 	
-	public boolean isWinConditionMet(Map map) {
+	public boolean isWinConditionMet(MapViewer map) {
 		String[] grid = map.getMapField();
 		
 		if (grid[0].equals(grid[3]) && grid[0].equals(grid[6])) {
@@ -44,7 +44,7 @@ public class Score {
 		this.turnCounter = turnCounter;
 	}
 	
-	public boolean isTie(Map map) {
+	public boolean isTie(MapViewer map) {
 		if (turnCounter == map.getMapField().length) {
 			return true;
 		}
