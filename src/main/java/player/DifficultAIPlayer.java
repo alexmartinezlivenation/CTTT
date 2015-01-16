@@ -14,172 +14,53 @@ public class DifficultAIPlayer implements Player {
 	private String personalSymbol;
 	private Move move;
 	private Collection<Move> winMoves;
-	//private Map referenceMap;
 	
 	public boolean makeMove(MapViewer map) {
 		move = new Move();
 		move.setPlayer(personalSymbol);
 		
-		int mapSize = map.getMapSize();
-		
-		//If can make a winning move, make it
-		for (int columnIndex=0; columnIndex<mapSize; columnIndex++) {
-			for (int rowIndex=0; rowIndex<mapSize; rowIndex++) {
-				//check for horizontal O's win moves
-				if (map.getMapField()[columnIndex*mapSize + ((rowIndex + 1) % mapSize)].equals("o")) {
-					if (map.getMapField()[columnIndex*mapSize + ((rowIndex + 2) % mapSize)].equals("o")) {
-						move.setPosition(Integer.toString(columnIndex*mapSize + rowIndex));
-					}
-				}
-				//check for vertical O's win moves
-				else if (map.getMapField()[((columnIndex + 1) % mapSize)*mapSize + rowIndex].equals("o")) {
-					if (map.getMapField()[((columnIndex + 2) % mapSize)*mapSize + rowIndex].equals("o")) {
-						move.setPosition(Integer.toString(columnIndex*mapSize + rowIndex));
-					}
-				}
-			}
-		}
-		
-		return map.updateMap(Integer.parseInt(move.getPosition()), move.getPlayer());
-		
-	}
-	
-	public boolean makeMoveUsingStates(MapViewer map) {
-		
 		winMoves = Collections.EMPTY_SET;
 		
-		move = new Move();
-		move.setPlayer(personalSymbol);
-		
 		//If winning move available, make it
-		
 		if(winMoves.isEmpty() == false) {
 			move = (Move) winMoves.toArray()[0];
-			//return true;
+			return map.updateMap(Integer.parseInt(move.getPosition()), move.getPlayer());
 		}
 		
 		//Search for opponent's winning move, and stop it
 		
 		String[][] mapAnalyzer = map.getSquareMap();
-		
 		List<String> emptySpaces = map.getEmptySpaces();
+		int mapSize = map.getMapSize();
 		
 		//Find out which rows, diagonals and columns have 1 empty space
-		List<String> emptyRows = new ArrayList<String>();
-		List<String> emptyColumns = new ArrayList<String>();
-		List<String> emptyDiagonals = new ArrayList<String>();
 		
-		boolean isEmpty=true;
+		List<Integer> rowsWithOneEmptySpace = populateRowsWithOneEmptySpace(mapSize, emptySpaces, mapAnalyzer);
+		List<Integer> columnsWithOneEmptySpace = populateColumnsWithOneEmptySpace(mapSize, emptySpaces, mapAnalyzer);
+		List<Integer> diagonalsWithOneEmptySpace = populateDiagonalsWithOneEmptySpace(mapSize, emptySpaces, mapAnalyzer);
 		
-		//create list of rows with only 1 empty space
-		for (int row=0; row<map.getMapSize(); row++) {
-			isEmpty=true;
-			for (int column=0; column<map.getMapSize(); column++) {
-				if (emptySpaces.contains(mapAnalyzer[row][column])) {
-					for (int columnSearch=column+1; columnSearch<map.getMapSize(); columnSearch++) {
-						if (emptySpaces.contains(mapAnalyzer[row][columnSearch])) {
-							isEmpty=false;
-							break;
-						}
-					}
-					if (isEmpty) {
-						emptyRows.add(Integer.toString(row));
-					}
-					else {
-						break;
-					}
-				}
-			}
-		}
-		
-		//create list of empty columns with only 1 empty space
-		for (int column=0; column<map.getMapSize(); column++) {
-			isEmpty=true;
-			for (int row=0; row<map.getMapSize(); row++) {
-				if (emptySpaces.contains(mapAnalyzer[row][column])) {
-					for (int rowSearch=row+1; rowSearch<map.getMapSize(); rowSearch++) {
-						if (emptySpaces.contains(mapAnalyzer[rowSearch][column])) {
-							isEmpty=false;
-							break;
-						}
-					}
-					if (isEmpty) {
-						emptyColumns.add(Integer.toString(column));
-					}
-					else {
-						break;
-					}
-				}
-			}
-		}
-		
-		//create list of empty diagonals
-		for (int leftDiagonal=0; leftDiagonal<map.getMapSize(); leftDiagonal++) {
-			isEmpty=true;
-			if (emptySpaces.contains(mapAnalyzer[leftDiagonal][leftDiagonal])) {
-				for (int DiagonalSearch=leftDiagonal+1; DiagonalSearch<map.getMapSize(); DiagonalSearch++) {
-					if (emptySpaces.contains(mapAnalyzer[DiagonalSearch][DiagonalSearch])) {
-						isEmpty=false;
-						break;
-					}
-				}
-				if (isEmpty) {
-					emptyDiagonals.add("0");
-				}
-				else {
-					break;
-				}
-			}
-		}
-		
-		for (int rightDiagonal=0; rightDiagonal<map.getMapSize(); rightDiagonal++) {
-			isEmpty=true;
-			if (emptySpaces.contains(mapAnalyzer[rightDiagonal][map.getMapSize() - rightDiagonal])) {
-				for (int DiagonalSearch=rightDiagonal+1; DiagonalSearch<map.getMapSize(); DiagonalSearch++) {
-					if (emptySpaces.contains(mapAnalyzer[DiagonalSearch][map.getMapSize() - DiagonalSearch])) {
-						isEmpty=false;
-						break;
-					}
-				}
-				if (isEmpty) {
-					emptyDiagonals.add("1");
-				}
-				else {
-					break;
-				}
-			}
-		}
-		
-		//From those, analyze for opponent's win moves
-
-		//analyze rows for opponent's winning move
-		/*for (int row=0; row<map.getMapSize(); row++) {
-			for (int column=0; column<map.getMapSize(); column++) {
-				if (!emptySpaces.contains(mapAnalyzer[row][column]) && !mapAnalyzer[row][column].equals(personalSymbol)) {
-					for (int columnSearch = column+1; columnSearch<map.getMapSize(); columnSearch++) {
-						if (!mapAnalyzer[row][column].equals(mapAnalyzer[row][columnSearch])) {
-							break;
-						}
-						else {
-							move.setPosition(mapAnalyzer[row][column]);
-							return map.updateMap(Integer.parseInt(move.getPosition()), move.getPlayer());
-						}
-					}
-					break;
-				}
-			}
-		}*/
-		
-		//analyze rows to prevent win move (i.e. make sure only opponent has pieces here)
+		//analyze rows to prevent opponent's win move (i.e. make sure only opponent has pieces here)
 		boolean blockNeeded=true;
 		String emptyPosition="";
 		
-		for (String emptyRow : emptyRows) {
+		/*
+		 * if (SuccessfullyBlockOpponentRowMove(rowsWithOneEmptySpace, emptySpaces, mapAnalyzer, mapSize)) {
+		 *     return true;
+		 * }
+		 * else if (SuccessfullyBlockOpponentColumnMove(columnsWithOneEmptySpace, emptySpaces, mapAnalyzer, mapSize)) {
+		 *     return true;
+		 * }
+		 * else if (SuccessfullyBlockOpponentDiagonalMove(diagonalsWithOneEmptySpace, emptySpaces, mapAnalyzer, mapSize)) {
+		 *     return true;
+		 * }
+		 * 
+		 */
+		
+		for (int row : rowsWithOneEmptySpace) {
 			blockNeeded=true;
-			int row = Integer.parseInt(emptyRow);
-			for (int column=0; column<map.getMapSize(); column++) {
+			for (int column=0; column<mapSize; column++) {
 				if (!emptySpaces.contains(mapAnalyzer[row][column]) && !mapAnalyzer[row][column].equals(personalSymbol)) {
-					for (int columnSearch = column+1; columnSearch<map.getMapSize(); columnSearch++) {
+					for (int columnSearch = column+1; columnSearch<mapSize; columnSearch++) {
 						if (emptySpaces.contains(mapAnalyzer[row][columnSearch])) {
 							emptyPosition = mapAnalyzer[row][columnSearch];
 							continue;
@@ -203,14 +84,12 @@ public class DifficultAIPlayer implements Player {
 		}
 		
 		//analyze columns to prevent win move (i.e. make sure only opponent has pieces here)
-		emptyPosition="";
 		
-		for (String emptyCol : emptyColumns) {
+		for (int column : columnsWithOneEmptySpace) {
 			blockNeeded=true;
-			int column = Integer.parseInt(emptyCol);
-			for (int row=0; row<map.getMapSize(); row++) {
+			for (int row=0; row<mapSize; row++) {
 				if (!emptySpaces.contains(mapAnalyzer[row][column]) && !mapAnalyzer[row][column].equals(personalSymbol)) {
-					for (int rowSearch = row+1; rowSearch<map.getMapSize(); rowSearch++) {
+					for (int rowSearch = row+1; rowSearch<mapSize; rowSearch++) {
 						if (emptySpaces.contains(mapAnalyzer[rowSearch][column])) {
 							emptyPosition = mapAnalyzer[rowSearch][column];
 							continue;
@@ -234,44 +113,156 @@ public class DifficultAIPlayer implements Player {
 		}
 		
 		//analyze left diagonal (by left meaning top-left)
-		if (emptyDiagonals.contains("0")) {
-			
+		if (diagonalsWithOneEmptySpace.contains(0)) {
+			blockNeeded=true;
+			for (int leftDiagonal=0; leftDiagonal<mapSize; leftDiagonal++) {
+				if (!emptySpaces.contains(mapAnalyzer[leftDiagonal][leftDiagonal]) && !mapAnalyzer[leftDiagonal][leftDiagonal].equals(personalSymbol)) {
+					for (int diagonalSearch=leftDiagonal+1; diagonalSearch<mapSize; diagonalSearch++) {
+						if (emptySpaces.contains(mapAnalyzer[diagonalSearch][diagonalSearch])) {
+							emptyPosition = mapAnalyzer[diagonalSearch][diagonalSearch];
+							continue;
+						}
+						else if (!mapAnalyzer[leftDiagonal][leftDiagonal].equals(mapAnalyzer[diagonalSearch][diagonalSearch])) {
+							blockNeeded=false;
+							break;
+						}
+					}
+					if (blockNeeded) {
+						move.setPosition(emptyPosition);
+						return map.updateMap(Integer.parseInt(move.getPosition()), move.getPlayer());
+					}
+					else {
+						break;
+					}
+				}
+				emptyPosition = mapAnalyzer[leftDiagonal][leftDiagonal];
+			}
 		}
 		
+		//analyze right diagonal (by right meaning top-right)
+		if (diagonalsWithOneEmptySpace.contains(1)) {
+			blockNeeded=true;
+			for (int rightDiagonal=0; rightDiagonal<mapSize; rightDiagonal++) {
+				if (!emptySpaces.contains(mapAnalyzer[rightDiagonal][mapSize - rightDiagonal - 1]) && !mapAnalyzer[rightDiagonal][mapSize - rightDiagonal - 1].equals(personalSymbol)) {
+					for (int diagonalSearch=rightDiagonal+1; diagonalSearch<mapSize; diagonalSearch++) {
+						int colDiagonalSearch = mapSize-diagonalSearch-1;
+						if (emptySpaces.contains(mapAnalyzer[diagonalSearch][colDiagonalSearch])) {
+							emptyPosition = mapAnalyzer[diagonalSearch][colDiagonalSearch];
+							continue;
+						}
+						else if (!mapAnalyzer[rightDiagonal][mapSize - rightDiagonal - 1].equals(mapAnalyzer[diagonalSearch][colDiagonalSearch])) {
+							blockNeeded=false;
+							break;
+						}
+					}
+					if (blockNeeded) {
+						move.setPosition(emptyPosition);
+						return map.updateMap(Integer.parseInt(move.getPosition()), move.getPlayer());
+					}
+					else {
+						break;
+					}
+				}
+				emptyPosition = mapAnalyzer[rightDiagonal][mapSize - rightDiagonal - 1];
+			}
+		}
 		
 		return false;
 	}
 	
-	public boolean checkVertical(Move move, MapViewer map) {
+	private List<Integer> populateRowsWithOneEmptySpace(int mapSize, List<String> emptySpaces, String[][] mapAnalyzer) {
+		boolean isEmpty = true;
+		List<Integer> emptyRows = new ArrayList<Integer>();
 		
-		for (int columnIndex = Integer.parseInt(move.getPosition()) % map.getMapSize(); columnIndex < map.getMapField().length; columnIndex+= map.getMapSize()) {
-			if (map.getMapField()[columnIndex].equals("x")) {
-				return false;
+		for (int row=0; row<mapSize; row++) {
+			isEmpty=true;
+			for (int column=0; column<mapSize; column++) {
+				if (emptySpaces.contains(mapAnalyzer[row][column])) {
+					for (int columnSearch=column+1; columnSearch<mapSize; columnSearch++) {
+						if (emptySpaces.contains(mapAnalyzer[row][columnSearch])) {
+							isEmpty=false;
+							break;
+						}
+					}
+					if (isEmpty) {
+						emptyRows.add(row);
+					}
+					else {
+						break;
+					}
+				}
 			}
 		}
-		
-		return true;
+		return emptyRows;
 	}
 	
-	public boolean checkHorizontal(Move move, MapViewer map) {
-		int position = Integer.parseInt(move.getPosition());
-		int mapLength = map.getMapSize();
-		int thisRowIndex = (position - (position%mapLength))/mapLength;
-		int nextRowIndex = thisRowIndex + 1;
+	private List<Integer> populateColumnsWithOneEmptySpace(int mapSize, List<String> emptySpaces, String[][] mapAnalyzer) {
+		boolean isEmpty = true;
+		List<Integer> emptyColumns = new ArrayList<Integer>();
 		
-		for (int rowIndex = thisRowIndex * mapLength; rowIndex < nextRowIndex*mapLength; rowIndex++) {
-			if (!map.getMapField()[rowIndex].equals(move.getPlayer())) {
-				if (!map.getMapField()[rowIndex].equals(Integer.toString(rowIndex))) {
-					return false;
+		for (int column=0; column<mapSize; column++) {
+			isEmpty=true;
+			for (int row=0; row<mapSize; row++) {
+				if (emptySpaces.contains(mapAnalyzer[row][column])) {
+					for (int rowSearch=row+1; rowSearch<mapSize; rowSearch++) {
+						if (emptySpaces.contains(mapAnalyzer[rowSearch][column])) {
+							isEmpty=false;
+							break;
+						}
+					}
+					if (isEmpty) {
+						emptyColumns.add(column);
+					}
+					else {
+						break;
+					}
+				}
+			}
+		}
+		return emptyColumns;
+	}
+	
+	private List<Integer> populateDiagonalsWithOneEmptySpace(int mapSize, List<String> emptySpaces, String[][] mapAnalyzer) {
+		boolean isEmpty = true;
+		List<Integer> emptyDiagonals = new ArrayList<Integer>();
+		
+		for (int leftDiagonal=0; leftDiagonal<mapSize; leftDiagonal++) {
+			isEmpty=true;
+			if (emptySpaces.contains(mapAnalyzer[leftDiagonal][leftDiagonal])) {
+				for (int DiagonalSearch=leftDiagonal+1; DiagonalSearch<mapSize; DiagonalSearch++) {
+					if (emptySpaces.contains(mapAnalyzer[DiagonalSearch][DiagonalSearch])) {
+						isEmpty=false;
+						break;
+					}
+				}
+				if (isEmpty) {
+					emptyDiagonals.add(0);
+				}
+				else {
+					break;
 				}
 			}
 		}
 		
-		return true;
-	}
-	
-	public boolean checkDiagonal(Move move, MapViewer map) {
-		return true;
+		for (int rightDiagonal=0; rightDiagonal<mapSize; rightDiagonal++) {
+			isEmpty=true;
+			if (emptySpaces.contains(mapAnalyzer[rightDiagonal][mapSize - rightDiagonal - 1])) {
+				for (int DiagonalSearch=rightDiagonal+1; DiagonalSearch<mapSize; DiagonalSearch++) {
+					if (emptySpaces.contains(mapAnalyzer[DiagonalSearch][mapSize - DiagonalSearch - 1])) {
+						isEmpty=false;
+						break;
+					}
+				}
+				if (isEmpty) {
+					emptyDiagonals.add(1);
+				}
+				else {
+					break;
+				}
+			}
+		}
+		
+		return emptyDiagonals;
 	}
 
 	public String getPersonalSymbol() {
@@ -281,10 +272,6 @@ public class DifficultAIPlayer implements Player {
 	public void setPersonalSymbol(String personalSymbol) {
 		this.personalSymbol = personalSymbol;
 	}
-	
-	/*public void setReferenceMap(Map referenceMap) {
-		this.referenceMap = referenceMap;
-	}*/
 
 }
 
