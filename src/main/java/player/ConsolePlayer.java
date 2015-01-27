@@ -18,7 +18,7 @@ public class ConsolePlayer implements Player {
 		move.setPlayer(personalSymbol);
 		move.setPosition(input);
 		
-		return map.updateMap(Integer.parseInt(move.getPosition()), move.getPlayer());
+		return map.updateMap(move);
 	}
 
 	public String getPersonalSymbol() {

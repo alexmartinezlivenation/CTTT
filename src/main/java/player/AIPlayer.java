@@ -18,7 +18,7 @@ public class AIPlayer implements Player {
 		move.setPlayer(personalSymbol);
 		move.setPosition(Integer.toString(randomGenerator.nextInt(9)));
 		
-		return map.updateMap(Integer.parseInt(move.getPosition()), move.getPlayer());
+		return map.updateMap(move);
 	}
 
 	public String getPersonalSymbol() {

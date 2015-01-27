@@ -2,8 +2,14 @@ package map;
 
 import java.util.List;
 
+import player.Move;
+
 public class MapViewer {
 	private Map viewedMap;
+	
+	public boolean updateMap(Move move) {
+		return viewedMap.updateMap(move);
+	}
 	
 	public boolean updateMap(int position, String player) {
 		return viewedMap.updateMap(position, player);

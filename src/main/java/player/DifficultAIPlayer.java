@@ -24,7 +24,7 @@ public class DifficultAIPlayer implements Player {
 		//If winning move available, make it
 		if(winMoves.isEmpty() == false) {
 			move = (Move) winMoves.toArray()[0];
-			return map.updateMap(Integer.parseInt(move.getPosition()), move.getPlayer());
+			return map.updateMap(move);
 		}
 		
 		//Search for opponent's winning move, and stop it
@@ -73,7 +73,7 @@ public class DifficultAIPlayer implements Player {
 					
 					if (blockNeeded) {
 						move.setPosition(emptyPosition);
-						return map.updateMap(Integer.parseInt(move.getPosition()), move.getPlayer());
+						return map.updateMap(move);
 					}
 					else {
 						break;
@@ -102,7 +102,7 @@ public class DifficultAIPlayer implements Player {
 					
 					if (blockNeeded) {
 						move.setPosition(emptyPosition);
-						return map.updateMap(Integer.parseInt(move.getPosition()), move.getPlayer());
+						return map.updateMap(move);
 					}
 					else {
 						break;
@@ -129,7 +129,7 @@ public class DifficultAIPlayer implements Player {
 					}
 					if (blockNeeded) {
 						move.setPosition(emptyPosition);
-						return map.updateMap(Integer.parseInt(move.getPosition()), move.getPlayer());
+						return map.updateMap(move);
 					}
 					else {
 						break;
@@ -157,7 +157,7 @@ public class DifficultAIPlayer implements Player {
 					}
 					if (blockNeeded) {
 						move.setPosition(emptyPosition);
-						return map.updateMap(Integer.parseInt(move.getPosition()), move.getPlayer());
+						return map.updateMap(move);
 					}
 					else {
 						break;

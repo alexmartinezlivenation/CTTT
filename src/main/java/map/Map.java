@@ -3,7 +3,9 @@ package map;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Map {
+import player.Move;
+
+public class Map implements MapInterface {
 	private String[] mapField;
 	private int mapSize;
 	private List<String> emptySpaces;
@@ -22,6 +24,10 @@ public class Map {
 		}
 		
 		mapSize = size;
+	}
+	
+	public boolean updateMap(Move move) {
+		return updateMap(Integer.parseInt(move.getPosition()), move.getPlayer());
 	}
 	
 	public boolean updateMap(int position, String player) {
