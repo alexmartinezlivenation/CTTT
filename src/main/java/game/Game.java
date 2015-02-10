@@ -7,7 +7,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import output.Output;
-import output.impl.OutputConsole;
+import output.OutputImpl;
+import output.impl.ConsoleDisplay;
 import player.AIPlayer;
 import player.ConsolePlayer;
 import player.DifficultAIPlayer;
@@ -26,7 +27,7 @@ public class Game {
 		
 		Score score = new Score();
 		
-		OutputConsole oc = new OutputConsole();
+		Output oc = new OutputImpl(new ConsoleDisplay());
 		ConsolePlayer player1 = new ConsolePlayer();
 		Player player2;
 		String gameMode = "";

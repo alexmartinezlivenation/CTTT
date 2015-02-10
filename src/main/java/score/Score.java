@@ -1,11 +1,17 @@
 package score;
 
+import java.util.HashMap;
+
 import map.MapViewer;
 
 public class Score {
 	private int turnCounter;
 	
 	public boolean isWinConditionMet(MapViewer map) {
+		HashMap<String, String> newMap = map.getMap();
+		
+		
+		
 		String[] grid = map.getMapField();
 		
 		if (grid[0].equals(grid[3]) && grid[0].equals(grid[6])) {

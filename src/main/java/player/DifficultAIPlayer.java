@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import map.MapViewer;
 
@@ -14,6 +15,47 @@ public class DifficultAIPlayer implements Player {
 	private String personalSymbol;
 	private Move move;
 	private Collection<Move> winMoves;
+	
+	public boolean makeSimpleMove(MapViewer map) {
+		move = new Move();
+		move.setPlayer(personalSymbol);
+		
+		if (winMoveAvailable(map)) {
+			move.setPosition(getWinMove(map));
+			return map.updateMap(move);
+		}
+		else if (loseMoveAvailable(map)) {
+			move.setPosition(getLoseMove(map));
+			return map.updateMap(move);
+		}
+		else {
+			move.setPosition(getRandomPosition());
+			//Random randomGenerator = new Random();
+			//move.setPosition(Integer.toString(randomGenerator.nextInt(9)));
+			return map.updateMap(move);
+		}
+	}
+	
+	private boolean winMoveAvailable(MapViewer map) {
+		return false;
+	}
+	
+	private boolean loseMoveAvailable(MapViewer map) {
+		return false;
+	}
+	
+	private String getWinMove(MapViewer map) {
+		return "";
+	}
+	
+	private String getLoseMove(MapViewer map) {
+		return "";
+	}
+	
+	private String getRandomPosition() {
+		Random randomGenerator = new Random();
+		return Integer.toString(randomGenerator.nextInt(9));
+	}
 	
 	public boolean makeMove(MapViewer map) {
 		move = new Move();
@@ -42,19 +84,6 @@ public class DifficultAIPlayer implements Player {
 		//analyze rows to prevent opponent's win move (i.e. make sure only opponent has pieces here)
 		boolean blockNeeded=true;
 		String emptyPosition="";
-		
-		/*
-		 * if (SuccessfullyBlockOpponentRowMove(rowsWithOneEmptySpace, emptySpaces, mapAnalyzer, mapSize)) {
-		 *     return true;
-		 * }
-		 * else if (SuccessfullyBlockOpponentColumnMove(columnsWithOneEmptySpace, emptySpaces, mapAnalyzer, mapSize)) {
-		 *     return true;
-		 * }
-		 * else if (SuccessfullyBlockOpponentDiagonalMove(diagonalsWithOneEmptySpace, emptySpaces, mapAnalyzer, mapSize)) {
-		 *     return true;
-		 * }
-		 * 
-		 */
 		
 		for (int row : rowsWithOneEmptySpace) {
 			blockNeeded=true;
@@ -274,123 +303,3 @@ public class DifficultAIPlayer implements Player {
 	}
 
 }
-
-//check for our win moves and make it
-
-		//check for opponent's win moves and try to stop it
-		//count the number of potential win moves that the opponent can make, and try to limit that
-		/*
-		 * Map 1: count r,c, d
-		 * Map 2: X map
-		 * Map 3: O map
-		 */
-		
-		/*
-		 * x| | 
-		 * -----
-		 *  |o|
-		 * -----
-		 *  | |x
-		 */
-		
-		/*
-		 * 3|2|2				To do this, will need 2 functions:
-		 * -----				calculateEmptyValue(position)
-		 * 1|3|x				calculateMoveValue(playerSymbol, position)
-		 * -----
-		 * 3|2|2
-		 */
-		
-		/*X-map
-		 * x|1|2
-		 * -----
-		 * 1|-|1
-		 * -----
-		 * 2|1|x
-		 */
-		
-		/*O-map
-		 * -|1|1
-		 * -----
-		 * 1|o|1
-		 * -----
-		 * 1|1|-
-		 */
-		
-		/*O+1-map
-		 * x| | 
-		 * -----
-		 *  |o|
-		 * -----
-		 *  | |x
-		 */
-		
-		//if x has >1 moves with two ways to win, then o should choose a move to force x to not take any of those options
-		
-		/*
-		 * -|1|-
-		 * -----
-		 * 1|o|1
-		 * -----
-		 * -|1|-
-		 */
-		
-		//Example 2:
-		
-		/*
-		 * x| | 
-		 * -----
-		 *  |x| 
-		 * -----
-		 *  | |o
-		 */
-		
-		/*
-		 * x|2|2
-		 * -----
-		 * 2|x|1
-		 * -----
-		 * 2|1|o
-		 */
-		
-		/*
-		 * x|0|1
-		 * -----
-		 * 0|x|1
-		 * -----
-		 * 1|1|o
-		 */
-		
-		//What if we tried to predict a move ahead?
-		
-		/*X-map:
-		 * x|2|2
-		 * -----
-		 * 2|x|1
-		 * -----
-		 * 2|1|o
-		 */
-		
-		/*O-map
-		 * -|0|1
-		 * -----
-		 * 0|-|1
-		 * -----
-		 * 1|1|o
-		 */
-		
-		//New line of thought: after checking for immediate wins and losses, use X-map to predict X's best moves.
-		//Then choose a move as O that will force X to use one of the worse predicted moves, and benefit O
-		
-		//Psuedocode:
-		//	1. Check for immediate O wins
-		//		If move available, break;
-		//  2. Check for immediate X wins
-		//		If move available, break;
-		//  3. Create map for X's next move
-		//		Check for win-opening moves for X
-		//  4. Create map for O's next move
-		//		Check for win-opening moves for O
-		//		If X-map and O-map provide enough information to make a move, break;
-		//  5. Create map for empty rows/columns/diagonals
-		//		Use only if X-map and O-map doesn't provide enough information
