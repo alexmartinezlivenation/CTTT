@@ -5,7 +5,6 @@ import static org.junit.Assert.*;
 import java.util.HashMap;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 public class MapTest {
 	
@@ -13,6 +12,7 @@ public class MapTest {
 	
 	@Test
 	public void testInitializeMap() {
+		
 		testMap.initializeMap(0);
 		assertArrayEquals(new String[] {}, testMap.getMapField());
 		assertEquals(new HashMap<String, String>(), testMap.getMap());

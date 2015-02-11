@@ -7,54 +7,49 @@ import java.util.List;
 
 import player.Move;
 
-class columnContainer {
-	private String symbol;
-	private List<String> columns;
-	
-	public columnContainer(String symbol, List<String> columns) {
-		this.symbol = symbol;
-		this.columns = columns;
-	}
-	
-	public String getSymbol() {
-		return symbol;
-	}
-	
-	public void setSymbol(String symbol) {
-		this.symbol = symbol;
-	}
-	
-	public List<String> getColumns() {
-		return columns;
-	}
-	
-	public void addColumn(String column) {
-		columns.add(column);
-	}
-}
-
 public class MapViewer {
 	private Map viewedMap;
-	private HashMap<String, columnContainer> gridMap;
-	private Collection<String> owners;
+	private HashMap<String, String[]> rowTable = new HashMap<String, String[]>();
+	private HashMap<String, String[]> colTable = new HashMap<String, String[]>();
+	private HashMap<String, String[]> digTable = new HashMap<String, String[]>();
 	
 	public boolean updateMap(Move move) {
-		String[] cartesianPosition = convertToCartesian(move.getPosition());
-		ColumnContainer cc = null;
-		
-		if (!gridMap.containsKey(cartesianPosition)) {
-			gridMap.put(cartesianPosition[0], new ColumnContainer(move.getPlayer(), Arrays.asList(cartesianPosition[1])));
-		}
-		else {
-			gridMap.put(cartesianPosition[0], value);
-		}
+		String[] cartesianPosition = convertToCartesian(move);
+		updateTables(cartesianPosition);
 		
 		return viewedMap.updateMap(move);
 	}
 	
-	private String[] convertToCartesian(String position) {
-		return new String[2];
+	private String[] convertToCartesian(Move move) {
+		String[] cartesian = new String[3];
+		cartesian[0] = move.getPlayer();
+		
+		int position = Integer.parseInt(move.getPosition());
+		cartesian[1] = Integer.toString(position / viewedMap.getMapSize());
+		cartesian[2] = Integer.toString(position % viewedMap.getMapSize());
+		
+		return cartesian;
 	}
+	
+	private void updateTables(String[] cartesianPosition) {
+        updateTable(rowTable, cartesianPosition[1], cartesianPosition[0]);
+        updateTable(colTable, cartesianPosition[2], cartesianPosition[0]);
+	}
+
+    private void updateTable(HashMap<String, String[]> table, String tableIndex, String playerSymbol) {
+        if (table.containsKey(tableIndex)) {
+            if (table.get(tableIndex)[0].equals(playerSymbol)) {
+                int symbolCount = Integer.parseInt(table.get(tableIndex)[1]);
+                table.put(tableIndex, new String[]{playerSymbol, Integer.toString(symbolCount + 1)});
+            }
+            else {
+                table.put(tableIndex, new String[]{"", null});
+            }
+        }
+        else {
+            table.put(tableIndex, new String[]{playerSymbol, "1"});
+        }
+    }
 	
 	public boolean updateMap(int position, String player) {
 		return viewedMap.updateMap(position, player);
@@ -91,15 +86,8 @@ public class MapViewer {
 	public HashMap<String, String> getMap() {
 		return viewedMap.getMap();
 	}
+	
+	public HashMap<String, String[]> getRowTable() {
+		return rowTable;
+	}
 }
-
-//position, symbol
-
-//symbol, row, column, diagonal, number
-//	could create class, takes input(symbol, position), saves it as (symbol, rcd, spacesTake)
-
-//could convert position into (x,y) coord and work with that
-
-//2 classes:
-//	row:	column, symbol
-//  symbol:	row/column/diagonal, number, amount

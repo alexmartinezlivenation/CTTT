@@ -1,6 +1,8 @@
 package score;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import map.MapViewer;
 
@@ -9,34 +11,19 @@ public class Score {
 	
 	public boolean isWinConditionMet(MapViewer map) {
 		HashMap<String, String> newMap = map.getMap();
-		
-		
-		
-		String[] grid = map.getMapField();
-		
-		if (grid[0].equals(grid[3]) && grid[0].equals(grid[6])) {
-			return true;
-		}
-		else if (grid[0].equals(grid[1]) && grid[0].equals(grid[2])) {
-			return true;
-		}
-		else if (grid[8].equals(grid[5]) && grid[8].equals(grid[2])) {
-			return true;
-		}
-		else if (grid[8].equals(grid[7]) && grid[8].equals(grid[6])) {
-			return true;
-		}
-		else if (grid[4].equals(grid[0]) && grid[4].equals(grid[8])) {
-			return true;
-		}
-		else if (grid[4].equals(grid[2]) && grid[4].equals(grid[6])) {
-			return true;
-		}
-		else if (grid[4].equals(grid[1]) && grid[4].equals(grid[7])) {
-			return true;
-		}
-		else if (grid[4].equals(grid[3]) && grid[4].equals(grid[5])) {
-			return true;
+		HashMap<String, String[]> rowTable = map.getRowTable();
+
+        if (rowTable.isEmpty()) {
+            return false;
+        }
+
+		for (String[] symbolPower : rowTable.values()) {
+            if (symbolPower[1] == null) {
+                return false;
+            }
+			if (Integer.parseInt(symbolPower[1]) == map.getMapSize()) {
+				return true;
+			}
 		}
 		
 		return false;

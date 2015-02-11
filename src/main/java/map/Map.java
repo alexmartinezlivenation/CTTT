@@ -79,33 +79,3 @@ public class Map implements MapInterface {
 	}
 	
 }
-
-/*
- * Idea: to use a hashmap or some sort of collection to only keep track of the rows/columns/diagonals that have 1+ symbols in them.
- * 
- * Properties:  The row/column/diagonal is 'owned' by a symbol if:
- * 					+it contains at least one copy of that symbol
- * 					+there is only one type of symbol in it (i.e. only 'x' symbols and no 'o' symbols)
- * 					+there is at least one empty space left in it
- * 
- * 				A row/column/diagonal is 'un-ownable' if:
- * 					+it has no empty spaces
- * 					+it contains more than one type of unique symbol (i.e. an 'x' and an 'o')
- * 
- * 				A row/column/diagonal is 'free' if:
- * 					+it has only empty spaces
- * 
- * 3 properties to keep track of:
- * 				type: 	if it is row, column, or diagonal
- * 				number:	the number of the row or column, or w/e number scheme we decide to use for the diagonals
- * 				owner:	the player that is uncontested for control.  If there is no owner, then leave the field blank?
- * 
- * Ways to do this:
- * 				-keep track of each row, column, diagonal as it gets owned, and track it all in a single mapping that includes the owner somehow.
- * 				-Use 2 maps: one for ownership and one for moves.
- * 				-
- * 
- * row, column, symbol
- * 
- * owner, row/column/diagonal, number
- */

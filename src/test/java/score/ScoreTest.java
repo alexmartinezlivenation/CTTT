@@ -6,6 +6,7 @@ import map.Map;
 import map.MapViewer;
 
 import org.junit.Test;
+import player.Move;
 
 public class ScoreTest {
 	Map testMap = new Map();
@@ -15,50 +16,47 @@ public class ScoreTest {
 	@Test
 	public void testIsWinConditionMet() {
 		assertNotNull(testScore);
-		
+
+        //test for a single row
 		testMap.initializeMap(3);
 		testView.setViewedMap(testMap);
 		assertFalse(testScore.isWinConditionMet(testView));
-		
-		testMap.setMapField(new String[] {	"o","1","2",
-											"o","4","5",
-											"o","7","8"});
-		assertTrue(testScore.isWinConditionMet(testView));
-		
-		testMap.setMapField(new String[] {	"x","x","x",
-											"3","4","5",
-											"6","7","8"});
-		assertTrue(testScore.isWinConditionMet(testView));
-		
-		testMap.setMapField(new String[] {	"0","1","x",
-											"3","4","x",
-											"6","7","x"});
-		assertTrue(testScore.isWinConditionMet(testView));
-		
-		testMap.setMapField(new String[] {	"0","1","2",
-											"3","4","5",
-											"x","x","x"});
-		assertTrue(testScore.isWinConditionMet(testView));
-		
-		testMap.setMapField(new String[] {	"0","1","x",
-											"3","x","5",
-											"x","7","8"});
-		assertTrue(testScore.isWinConditionMet(testView));
 
-		testMap.setMapField(new String[] {	"x","1","2",
-											"3","x","5",
-											"6","7","x"});
-		assertTrue(testScore.isWinConditionMet(testView));
-		
-		testMap.setMapField(new String[] {	"0","1","2",
-											"x","x","x",
-											"6","7","8"});
-		assertTrue(testScore.isWinConditionMet(testView));
+        Move moveX = new Move();
+        moveX.setPlayer("x");
+        moveX.setPosition("0");
+        testView.updateMap(moveX);
+        assertFalse(testScore.isWinConditionMet(testView));
 
-		testMap.setMapField(new String[] {	"0","x","2",
-											"3","x","5",
-											"6","x","8"});
-		assertTrue(testScore.isWinConditionMet(testView));
+        moveX.setPosition("1");
+        testView.updateMap(moveX);
+        assertFalse(testScore.isWinConditionMet(testView));
+
+        moveX.setPosition("2");
+        testView.updateMap(moveX);
+        assertTrue(testScore.isWinConditionMet(testView));
+
+        //test for a full row with mixed symbols
+
+        testMap.initializeMap(3);
+        testView = new MapViewer();
+        testView.setViewedMap(testMap);
+        assertFalse(testScore.isWinConditionMet(testView));
+
+        Move moveO = new Move();
+        moveO.setPlayer("o");
+        moveO.setPosition("0");
+        testView.updateMap(moveO);
+        assertFalse(testScore.isWinConditionMet(testView));
+
+        moveX.setPosition("1");
+        testView.updateMap(moveX);
+        assertFalse(testScore.isWinConditionMet(testView));
+
+        moveO.setPosition("2");
+        testView.updateMap(moveO);
+        assertFalse(testScore.isWinConditionMet(testView));
+		
 	}
 
 }
