@@ -44,7 +44,6 @@ public class Map implements MapInterface {
 			if (mapField[position].equals(Integer.toString(position))) {
 				mapField[position] = player;
 				emptySpaces.remove(Integer.toString(position));
-				return true;
 			}
 		}
 		return false;
@@ -64,10 +63,6 @@ public class Map implements MapInterface {
 	
 	public String[] getMapField() {
 		return mapField;
-	}
-
-	public void setMapField(String[] mapField) {
-		this.mapField = mapField;
 	}
 
 	public int getMapSize() {

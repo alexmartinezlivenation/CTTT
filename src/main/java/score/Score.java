@@ -10,24 +10,24 @@ public class Score {
 	private int turnCounter;
 	
 	public boolean isWinConditionMet(MapViewer map) {
-		HashMap<String, String> newMap = map.getMap();
-		HashMap<String, String[]> rowTable = map.getRowTable();
+        return (tableContainsWin(map.getRowTable(), map.getMapSize()) || tableContainsWin(map.getColTable(), map.getMapSize()) || tableContainsWin(map.getDigTable(), map.getMapSize()));
+	}
 
-        if (rowTable.isEmpty()) {
+    private boolean tableContainsWin(HashMap<String, String[]> table, int mapSize) {
+        if (table.isEmpty()) {
             return false;
         }
-
-		for (String[] symbolPower : rowTable.values()) {
+        for (String[] symbolPower : table.values()) {
             if (symbolPower[1] == null) {
-                return false;
+                continue;
             }
-			if (Integer.parseInt(symbolPower[1]) == map.getMapSize()) {
-				return true;
-			}
-		}
-		
-		return false;
-	}
+            if (Integer.parseInt(symbolPower[1]) == mapSize) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
 	public int getTurnCounter() {
 		return turnCounter;

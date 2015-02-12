@@ -32,22 +32,60 @@ public class MapViewer {
 	}
 	
 	private void updateTables(String[] cartesianPosition) {
-        updateTable(rowTable, cartesianPosition[1], cartesianPosition[0]);
-        updateTable(colTable, cartesianPosition[2], cartesianPosition[0]);
-	}
+        updateRowTable(cartesianPosition[1], cartesianPosition[0]);
+        updateColTable(cartesianPosition[2], cartesianPosition[0]);
+        updateDigTable(cartesianPosition);
+    }
 
-    private void updateTable(HashMap<String, String[]> table, String tableIndex, String playerSymbol) {
-        if (table.containsKey(tableIndex)) {
-            if (table.get(tableIndex)[0].equals(playerSymbol)) {
-                int symbolCount = Integer.parseInt(table.get(tableIndex)[1]);
-                table.put(tableIndex, new String[]{playerSymbol, Integer.toString(symbolCount + 1)});
+    private void updateRowTable(String tableIndex, String playerSymbol) {
+        if (rowTable.containsKey(tableIndex)) {
+            if (rowTable.get(tableIndex)[0].equals(playerSymbol)) {
+                int symbolCount = Integer.parseInt(rowTable.get(tableIndex)[1]);
+                rowTable.put(tableIndex, new String[]{playerSymbol, Integer.toString(symbolCount + 1)});
             }
             else {
-                table.put(tableIndex, new String[]{"", null});
+                rowTable.put(tableIndex, new String[]{"", null});
             }
         }
         else {
-            table.put(tableIndex, new String[]{playerSymbol, "1"});
+            rowTable.put(tableIndex, new String[]{playerSymbol, "1"});
+        }
+    }
+
+    private void updateColTable(String tableIndex, String playerSymbol) {
+        if (colTable.containsKey(tableIndex)) {
+            if (colTable.get(tableIndex)[0].equals(playerSymbol)) {
+                int symbolCount = Integer.parseInt(colTable.get(tableIndex)[1]);
+                colTable.put(tableIndex, new String[]{playerSymbol, Integer.toString(symbolCount + 1)});
+            }
+            else {
+                colTable.put(tableIndex, new String[]{"", null});
+            }
+        }
+        else {
+            colTable.put(tableIndex, new String[]{playerSymbol, "1"});
+        }
+    }
+
+    private void updateDigTable(String[] cartesianCoord) {
+        if (cartesianCoord[1].equals(cartesianCoord[2])) {
+            updateSingleDig("\\", cartesianCoord[0]);
+        }
+
+        if (Integer.parseInt(cartesianCoord[1]) == (viewedMap.getMapSize() - Integer.parseInt(cartesianCoord[2]) - 1) ) {
+            updateSingleDig("/", cartesianCoord[0]);
+        }
+    }
+
+    private void updateSingleDig(String diagonal, String playerSymbol) {
+        if (digTable.containsKey(diagonal)) {
+            if (digTable.get(diagonal)[0].equals(playerSymbol)) {
+                int symbolCount = Integer.parseInt(digTable.get(diagonal)[1]) + 1;
+                digTable.put(diagonal, new String[]{playerSymbol, Integer.toString(symbolCount)});
+            }
+        }
+        else {
+            digTable.put(diagonal, new String[]{playerSymbol, "1"});
         }
     }
 	
@@ -90,4 +128,12 @@ public class MapViewer {
 	public HashMap<String, String[]> getRowTable() {
 		return rowTable;
 	}
+
+    public HashMap<String, String[]> getColTable() {
+        return colTable;
+    }
+
+    public HashMap<String, String[]> getDigTable() {
+        return digTable;
+    }
 }
