@@ -1,8 +1,6 @@
 package score;
 
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 import map.MapViewer;
 
@@ -36,9 +34,11 @@ public class Score {
 	public void setTurnCounter(int turnCounter) {
 		this.turnCounter = turnCounter;
 	}
-	
+
+
+    //TODO: test this!
 	public boolean isTie(MapViewer map) {
-		if (turnCounter == map.getMapField().length) {
+		if (turnCounter == (map.getMapSize() * map.getMapSize())) {
 			return true;
 		}
 		else {

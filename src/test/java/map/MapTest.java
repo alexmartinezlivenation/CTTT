@@ -43,7 +43,6 @@ public class MapTest {
 		
 		testMap.initializeMap(1);
 		assertFalse(testMap.updateMap(1,"x"));
-		assertArrayEquals(new String[] {"0"}, testMap.getMapField());
 		assertEquals(null, testMap.getMap().get("1"));
 		
 		testMap.initializeMap(3);

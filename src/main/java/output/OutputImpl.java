@@ -60,7 +60,6 @@ public class OutputImpl extends Output {
 			currentLine = currentLine + "----";
 		}
 		writeToScreen(currentLine);
-		currentLine=" ";
 	}
 	
 }

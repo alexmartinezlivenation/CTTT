@@ -1,9 +1,6 @@
 package map;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 
 import player.Move;
 
@@ -93,32 +90,12 @@ public class MapViewer {
 		return viewedMap.updateMap(position, player);
 	}
 	
-	public String[] getMapField() {
-		return viewedMap.getMapField();
-	}
-	
-	public String[][] getSquareMap() {
-		
-		int mapTotal = viewedMap.getMapSize();
-		String[][] squareMap = new String[mapTotal][mapTotal];
-
-		for(int position=0; position<(mapTotal * mapTotal); position++) {
-			squareMap[position/mapTotal][position % mapTotal] = viewedMap.getMapField()[position];
-		}
-		
-		return squareMap;
-	}
-	
 	public int getMapSize() {
 		return viewedMap.getMapSize();
 	}
 	
 	public void setViewedMap(Map viewedMap) {
 		this.viewedMap = viewedMap;
-	}
-	
-	public List<String> getEmptySpaces() {
-		return viewedMap.getEmptySpaces();
 	}
 	
 	public HashMap<String, String> getMap() {
