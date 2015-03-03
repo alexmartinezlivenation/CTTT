@@ -4,9 +4,6 @@ import player.Move;
 
 import java.util.HashMap;
 
-/**
- * Created by alex.martinez on 2/25/15.
- */
 public class BoardViewer {
     private BoardInterface viewedBoard;
     private HashMap<String, String[]> rowTable = new HashMap<String, String[]>();
@@ -85,6 +82,9 @@ public class BoardViewer {
             if (digTable.get(diagonal)[0].equals(playerSymbol)) {
                 int symbolCount = Integer.parseInt(digTable.get(diagonal)[1]) + 1;
                 digTable.put(diagonal, new String[]{playerSymbol, Integer.toString(symbolCount)});
+            }
+            else {
+                digTable.put(diagonal, new String[]{"", null});
             }
         }
         else {

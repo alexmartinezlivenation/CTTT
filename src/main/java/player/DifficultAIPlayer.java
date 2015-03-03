@@ -1,11 +1,9 @@
 package player;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
 
-import map.Board;
 import player.impl.PlayerDisplayInterface;
 
 import map.BoardViewer;
@@ -21,34 +19,6 @@ public class DifficultAIPlayer extends Player {
 		Random randomGenerator = new Random();
 		return Integer.toString(randomGenerator.nextInt(maxRand));
 	}
-
-    /*private void attemptWinningMove(BoardViewer board, String symbol) {
-        String index = rowWithWinningMove(board, symbol);
-        int boardSize = board.getBoardSize();
-        int position;
-        if (!index.equals("")) {
-            position = boardSize*Integer.parseInt(index) + Integer.parseInt(getRandomPosition(boardSize));
-            move.setPosition(Integer.toString(position));
-            return board.updateBoard(move);
-        }
-
-        index = colWithWinningMove(board, symbol);
-        if (!index.equals("")) {
-            position = boardSize*Integer.parseInt(getRandomPosition(boardSize)) + Integer.parseInt(index);
-            move.setPosition(Integer.toString(position));
-            return board.updateBoard(move);
-        }
-
-        index = digWithWinningMove(board, symbol);
-        if (!index.equals("")) {
-            move.setPosition(getRandomPosition(board.getBoardSize()));
-            return board.updateBoard(move);
-        }
-    }*/
-
-    private boolean losingMoveAvailable() {
-        return false;
-    }
 	
 	public boolean makeMove(BoardViewer board) {
 		move = new Move();
@@ -75,14 +45,27 @@ public class DifficultAIPlayer extends Player {
         }
 
 		//Search for opponent's winning move, and stop it
-		if (losingMoveAvailable()) {
-            move.setPosition(getRandomPosition(9));
+        index = rowWithLosingMove(board, personalSymbol);
+        if (!index.equals("")) {
+            move.setPosition(getRowEmptySpace(board, index));
+            return board.updateBoard(move);
+        }
+
+        index = colWithLosingMove(board, personalSymbol);
+        if (!index.equals("")) {
+            move.setPosition(getColEmptySpace(board, index));
+            return board.updateBoard(move);
+        }
+
+        index = digWithLosingMove(board, personalSymbol);
+        if (!index.equals("")) {
+            move.setPosition(getDigEmptySpace(board, index));
+            return board.updateBoard(move);
         }
 
         //Else, make a random move
-        else {
-            move.setPosition(getRandomPosition(board.getBoardSize()^2));
-        }
+        int position = board.getBoardSize() * board.getBoardSize();
+        move.setPosition(getRandomPosition(position));
 
 		return board.updateBoard(move);
 	}
@@ -93,6 +76,9 @@ public class DifficultAIPlayer extends Player {
         for (Map.Entry<String, String[]> entry : row.entrySet()) {
             String rowIndex = entry.getKey();
             String[] symbolPower = entry.getValue();
+            if (symbolPower[1] == null) {
+                continue;
+            }
             if (symbolPower[0].equals(symbol) && Integer.parseInt(symbolPower[1]) == board.getBoardSize() - 1) {
                 return rowIndex;
             }
@@ -108,6 +94,9 @@ public class DifficultAIPlayer extends Player {
         for (Map.Entry<String, String[]> entry : col.entrySet()) {
             String colIndex = entry.getKey();
             String[] symbolPower = entry.getValue();
+            if (symbolPower[1] == null) {
+                continue;
+            }
             if (symbolPower[0].equals(symbol) && Integer.parseInt(symbolPower[1]) == board.getBoardSize() - 1) {
                 return colIndex;
             }
@@ -122,7 +111,62 @@ public class DifficultAIPlayer extends Player {
         for (Map.Entry<String, String[]> entry : dig.entrySet()) {
             String digIndex = entry.getKey();
             String[] symbolPower = entry.getValue();
+            if (symbolPower[1] == null) {
+                continue;
+            }
             if (symbolPower[0].equals(symbol) && Integer.parseInt(symbolPower[1]) == board.getBoardSize() - 1) {
+                return digIndex;
+            }
+        }
+
+        return "";
+    }
+
+    private String rowWithLosingMove(BoardViewer board, String symbol) {
+        HashMap<String, String[]> row = board.getRowTable();
+
+        for (Map.Entry<String, String[]> entry : row.entrySet()) {
+            String rowIndex = entry.getKey();
+            String[] symbolPower = entry.getValue();
+            if (symbolPower[1] == null) {
+                continue;
+            }
+            if (!symbolPower[0].equals(symbol) && Integer.parseInt(symbolPower[1]) == board.getBoardSize() - 1) {
+                return rowIndex;
+            }
+        }
+
+        return "";
+
+    }
+
+    private String colWithLosingMove(BoardViewer board, String symbol) {
+        HashMap<String, String[]> col = board.getColTable();
+
+        for (Map.Entry<String, String[]> entry : col.entrySet()) {
+            String colIndex = entry.getKey();
+            String[] symbolPower = entry.getValue();
+            if (symbolPower[1] == null) {
+                continue;
+            }
+            if (!symbolPower[0].equals(symbol) && Integer.parseInt(symbolPower[1]) == board.getBoardSize() - 1) {
+                return colIndex;
+            }
+        }
+
+        return "";
+    }
+
+    private String digWithLosingMove(BoardViewer board, String symbol) {
+        HashMap<String, String[]> dig = board.getDigTable();
+
+        for (Map.Entry<String, String[]> entry : dig.entrySet()) {
+            String digIndex = entry.getKey();
+            String[] symbolPower = entry.getValue();
+            if (symbolPower[1] == null) {
+                continue;
+            }
+            if (!symbolPower[0].equals(symbol) && Integer.parseInt(symbolPower[1]) == board.getBoardSize() - 1) {
                 return digIndex;
             }
         }
@@ -142,7 +186,7 @@ public class DifficultAIPlayer extends Player {
 
         }
 
-        return getRandomPosition(9);  //should never return this
+        return getRandomPosition(board.getBoardSize()^2);  //should never return this
     }
 
     private String getColEmptySpace(BoardViewer board, String colIndex) {
@@ -156,11 +200,30 @@ public class DifficultAIPlayer extends Player {
 
         }
 
-        return "";  //should never return this
+        return getRandomPosition(board.getBoardSize()^2);  //should never return this
     }
 
     private String getDigEmptySpace(BoardViewer board, String digIndex) {
-        return getRandomPosition(9);
+        if (digIndex.equals("\\")) {
+            for (int relativePosition=0; relativePosition < board.getBoardSize(); relativePosition++) {
+                String position = Integer.toString(relativePosition * (board.getBoardSize() + 1));
+                if (!board.getBoard().containsKey(position)) {
+                    return position;
+                }
+
+            }
+        }
+        else if (digIndex.equals("/")) {
+            for (int relativePosition=0; relativePosition < board.getBoardSize(); relativePosition++) {
+                String position = Integer.toString((relativePosition + 1) * (board.getBoardSize() - 1));
+                if (!board.getBoard().containsKey(position)) {
+                    return position;
+                }
+
+            }
+        }
+
+        return getRandomPosition(board.getBoardSize()^2);  //should never return this
     }
 
 }
