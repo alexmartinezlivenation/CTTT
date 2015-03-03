@@ -2,15 +2,16 @@ package score;
 
 import static org.junit.Assert.*;
 
-import map.Map;
-import map.MapViewer;
+import map.BoardInterface;
+import map.Board;
+import map.BoardViewer;
 
 import org.junit.Test;
 import player.Move;
 
 public class ScoreTest {
-	Map testMap = new Map();
-	MapViewer testView = new MapViewer();
+	BoardInterface testMap = new Board();
+	BoardViewer testView = new BoardViewer();
 	Score testScore = new Score();
 
 	@Test
@@ -18,182 +19,217 @@ public class ScoreTest {
 		assertNotNull(testScore);
 
         //test for a single row
-		testMap.initializeMap(3);
-		testView.setViewedMap(testMap);
+		testMap.initializeBoard(3);
+		testView.setViewedBoard(testMap);
 		assertFalse(testScore.isWinConditionMet(testView));
 
         Move moveX = new Move();
         moveX.setPlayer("x");
         moveX.setPosition("0");
-        testView.updateMap(moveX);
+        testView.updateBoard(moveX);
         assertFalse(testScore.isWinConditionMet(testView));
 
         moveX.setPosition("1");
-        testView.updateMap(moveX);
+        testView.updateBoard(moveX);
         assertFalse(testScore.isWinConditionMet(testView));
 
         moveX.setPosition("2");
-        testView.updateMap(moveX);
+        testView.updateBoard(moveX);
         assertTrue(testScore.isWinConditionMet(testView));
 
         //test for a full row with mixed symbols
 
-        testMap.initializeMap(3);
-        testView = new MapViewer();
-        testView.setViewedMap(testMap);
+        testMap.initializeBoard(3);
+        testView = new BoardViewer();
+        testView.setViewedBoard(testMap);
         assertFalse(testScore.isWinConditionMet(testView));
 
         Move moveO = new Move();
         moveO.setPlayer("o");
         moveO.setPosition("0");
-        testView.updateMap(moveO);
+        testView.updateBoard(moveO);
         assertFalse(testScore.isWinConditionMet(testView));
 
         moveX.setPosition("1");
-        testView.updateMap(moveX);
+        testView.updateBoard(moveX);
         assertFalse(testScore.isWinConditionMet(testView));
 
         moveO.setPosition("2");
-        testView.updateMap(moveO);
+        testView.updateBoard(moveO);
         assertFalse(testScore.isWinConditionMet(testView));
 
         //the weird case
-        testMap.initializeMap(3);
-        testView = new MapViewer();
-        testView.setViewedMap(testMap);
+        testMap.initializeBoard(3);
+        testView = new BoardViewer();
+        testView.setViewedBoard(testMap);
         assertFalse(testScore.isWinConditionMet(testView));
 
         moveX.setPosition("4");
-        testView.updateMap(moveX);
+        testView.updateBoard(moveX);
         assertFalse(testScore.isWinConditionMet(testView));
 
         moveO.setPosition("5");
-        testView.updateMap(moveO);
+        testView.updateBoard(moveO);
         assertFalse(testScore.isWinConditionMet(testView));
 
         moveX.setPosition("1");
-        testView.updateMap(moveX);
+        testView.updateBoard(moveX);
         assertFalse(testScore.isWinConditionMet(testView));
 
         moveO.setPosition("8");
-        testView.updateMap(moveO);
+        testView.updateBoard(moveO);
         assertFalse(testScore.isWinConditionMet(testView));
 
         moveX.setPosition("2");
-        testView.updateMap(moveX);
+        testView.updateBoard(moveX);
         assertFalse(testScore.isWinConditionMet(testView));
 
         moveO.setPosition("3");
-        testView.updateMap(moveO);
+        testView.updateBoard(moveO);
         assertFalse(testScore.isWinConditionMet(testView));
 
         moveX.setPosition("0");
-        testView.updateMap(moveX);
+        testView.updateBoard(moveX);
         assertTrue(testScore.isWinConditionMet(testView));
+
+        //the second weird case
+        testMap.initializeBoard(3);
+        testView = new BoardViewer();
+        testView.setViewedBoard(testMap);
+        assertFalse(testScore.isWinConditionMet(testView));
+
+        moveX.setPosition("4");
+        testView.updateBoard(moveX);
+        assertFalse(testScore.isWinConditionMet(testView));
+
+        moveO.setPosition("2");
+        testView.updateBoard(moveO);
+        assertFalse(testScore.isWinConditionMet(testView));
+
+        moveX.setPosition("0");
+        testView.updateBoard(moveX);
+        assertFalse(testScore.isWinConditionMet(testView));
+
+        moveO.setPosition("5");
+        testView.updateBoard(moveO);
+        assertFalse(testScore.isWinConditionMet(testView));
+
+        moveX.setPosition("1");
+        testView.updateBoard(moveX);
+        assertFalse(testScore.isWinConditionMet(testView));
+
+        moveO.setPosition("7");
+        testView.updateBoard(moveO);
+        assertFalse(testScore.isWinConditionMet(testView));
+
+
+        //moveX.setPosition("6");
+        //testView.updateBoard(moveX);
+        //assertTrue(testScore.isWinConditionMet(testView));
 		
 	}
 
     @Test
     public void testColumnWin() {
         //test for a single column
-        testMap.initializeMap(3);
-        testView.setViewedMap(testMap);
+        testMap.initializeBoard(3);
+        testView.setViewedBoard(testMap);
         assertFalse(testScore.isWinConditionMet(testView));
 
         Move moveX = new Move();
         moveX.setPlayer("x");
         moveX.setPosition("0");
-        testView.updateMap(moveX);
+        testView.updateBoard(moveX);
         assertFalse(testScore.isWinConditionMet(testView));
 
         moveX.setPosition("3");
-        testView.updateMap(moveX);
+        testView.updateBoard(moveX);
         assertFalse(testScore.isWinConditionMet(testView));
 
         moveX.setPosition("6");
-        testView.updateMap(moveX);
+        testView.updateBoard(moveX);
         assertTrue(testScore.isWinConditionMet(testView));
 
         //test for a full column with mixed symbols
 
-        testMap.initializeMap(3);
-        testView = new MapViewer();
-        testView.setViewedMap(testMap);
+        testMap.initializeBoard(3);
+        testView = new BoardViewer();
+        testView.setViewedBoard(testMap);
         assertFalse(testScore.isWinConditionMet(testView));
 
         Move moveO = new Move();
         moveO.setPlayer("o");
         moveO.setPosition("1");
-        testView.updateMap(moveO);
+        testView.updateBoard(moveO);
         assertFalse(testScore.isWinConditionMet(testView));
 
         moveX.setPosition("4");
-        testView.updateMap(moveX);
+        testView.updateBoard(moveX);
         assertFalse(testScore.isWinConditionMet(testView));
 
         moveO.setPosition("7");
-        testView.updateMap(moveO);
+        testView.updateBoard(moveO);
         assertFalse(testScore.isWinConditionMet(testView));
     }
 
     @Test
     public void testDiagonalWin() {
         //test for a single diagonal
-        testMap.initializeMap(3);
-        testView.setViewedMap(testMap);
+        testMap.initializeBoard(3);
+        testView.setViewedBoard(testMap);
         assertFalse(testScore.isWinConditionMet(testView));
 
         Move moveX = new Move();
         moveX.setPlayer("x");
         moveX.setPosition("0");
-        testView.updateMap(moveX);
+        testView.updateBoard(moveX);
         assertFalse(testScore.isWinConditionMet(testView));
 
         moveX.setPosition("4");
-        testView.updateMap(moveX);
+        testView.updateBoard(moveX);
         assertFalse(testScore.isWinConditionMet(testView));
 
         moveX.setPosition("8");
-        testView.updateMap(moveX);
+        testView.updateBoard(moveX);
         assertTrue(testScore.isWinConditionMet(testView));
 
 
-        testMap.initializeMap(3);
-        testView = new MapViewer();
-        testView.setViewedMap(testMap);
+        testMap.initializeBoard(3);
+        testView = new BoardViewer();
+        testView.setViewedBoard(testMap);
         assertFalse(testScore.isWinConditionMet(testView));
 
         moveX.setPosition("6");
-        testView.updateMap(moveX);
+        testView.updateBoard(moveX);
         assertFalse(testScore.isWinConditionMet(testView));
 
         moveX.setPosition("4");
-        testView.updateMap(moveX);
+        testView.updateBoard(moveX);
         assertFalse(testScore.isWinConditionMet(testView));
 
         moveX.setPosition("2");
-        testView.updateMap(moveX);
+        testView.updateBoard(moveX);
         assertTrue(testScore.isWinConditionMet(testView));
 
         //test for a full diagonal with mixed symbols
 
-        testMap.initializeMap(3);
-        testView = new MapViewer();
-        testView.setViewedMap(testMap);
+        testMap.initializeBoard(3);
+        testView = new BoardViewer();
+        testView.setViewedBoard(testMap);
         assertFalse(testScore.isWinConditionMet(testView));
 
         Move moveO = new Move();
         moveO.setPlayer("o");
         moveO.setPosition("0");
-        testView.updateMap(moveO);
+        testView.updateBoard(moveO);
         assertFalse(testScore.isWinConditionMet(testView));
 
         moveX.setPosition("4");
-        testView.updateMap(moveX);
+        testView.updateBoard(moveX);
         assertFalse(testScore.isWinConditionMet(testView));
 
         moveO.setPosition("8");
-        testView.updateMap(moveO);
+        testView.updateBoard(moveO);
         assertFalse(testScore.isWinConditionMet(testView));
     }
 

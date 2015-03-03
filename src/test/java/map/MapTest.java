@@ -8,69 +8,64 @@ import org.junit.Test;
 
 public class MapTest {
 	
-	Map testMap = new Map();
+	Board testMap = new Board();
 	
 	@Test
-	public void testInitializeMap() {
+	public void testInitializeBoard() {
 		
-		testMap.initializeMap(0);
-		assertEquals(new HashMap<String, String>(), testMap.getMap());
-        assertEquals(0, testMap.getMapSize());
+		testMap.initializeBoard(0);
+		assertEquals(new HashMap<String, String>(), testMap.getBoard());
+        assertEquals(0, testMap.getBoardSize());
 		
-		testMap.initializeMap(1);
-        assertEquals(1, testMap.getMapSize());
+		testMap.initializeBoard(1);
+        assertEquals(1, testMap.getBoardSize());
 		
-		testMap.initializeMap(3);
-        assertEquals(3, testMap.getMapSize());
+		testMap.initializeBoard(3);
+        assertEquals(3, testMap.getBoardSize());
 		
-		testMap.initializeMap(4);
-        assertEquals(4, testMap.getMapSize());
+		testMap.initializeBoard(4);
+        assertEquals(4, testMap.getBoardSize());
 	}
 	
 	@Test
-	public void testMapStuff() {
-		assertTrue(true);
-	}
-	
-	@Test
-	public void testUpdateMap() {
-		testMap.initializeMap(0);
-		assertFalse(testMap.updateMap(1, "x"));
+	public void testUpdateBoard() {
+		testMap.initializeBoard(0);
+		assertFalse(testMap.updateBoard(1, "x"));
 		
-		testMap.initializeMap(1);
-		assertTrue(testMap.updateMap(0,"x"));
-		assertEquals("x", testMap.getMap().get("0"));
+		testMap.initializeBoard(1);
+		assertTrue(testMap.updateBoard(0,"x"));
+		assertEquals("x", testMap.getBoard().get("0"));
 		
-		testMap.initializeMap(1);
-		assertFalse(testMap.updateMap(1,"x"));
-		assertEquals(null, testMap.getMap().get("1"));
+		testMap.initializeBoard(1);
+		assertFalse(testMap.updateBoard(1,"x"));
+		assertEquals(null, testMap.getBoard().get("1"));
 		
-		testMap.initializeMap(3);
-		assertTrue(testMap.updateMap(0,"x"));
-		assertEquals("x", testMap.getMap().get("0"));
-        assertFalse(testMap.updateMap(0,"o"));
-        assertEquals("x", testMap.getMap().get("0"));
+		testMap.initializeBoard(3);
+		assertTrue(testMap.updateBoard(0,"x"));
+		assertEquals("x", testMap.getBoard().get("0"));
+        assertFalse(testMap.updateBoard(0,"o"));
+        assertEquals("x", testMap.getBoard().get("0"));
 		
-		assertFalse(testMap.updateMap(9,"x"));
-		assertEquals(null, testMap.getMap().get("9"));
+		assertFalse(testMap.updateBoard(9,"x"));
+		assertEquals(null, testMap.getBoard().get("9"));
 		
-		assertTrue(testMap.updateMap(8,"o"));
-		assertEquals("o", testMap.getMap().get("8"));
-        assertFalse(testMap.updateMap(8, "x"));
-        assertEquals("o", testMap.getMap().get("8"));
+		assertTrue(testMap.updateBoard(8,"o"));
+		assertEquals("o", testMap.getBoard().get("8"));
+        assertFalse(testMap.updateBoard(8, "x"));
+        assertEquals("o", testMap.getBoard().get("8"));
 		
-		testMap.initializeMap(4);
-		assertTrue(testMap.updateMap(3,"x"));
-		assertEquals("x", testMap.getMap().get("3"));
-        assertFalse(testMap.updateMap(3, "o"));
-        assertEquals("x", testMap.getMap().get("3"));
+		testMap.initializeBoard(4);
+		assertTrue(testMap.updateBoard(3,"x"));
+		assertEquals("x", testMap.getBoard().get("3"));
+        assertFalse(testMap.updateBoard(3, "o"));
+        assertEquals("x", testMap.getBoard().get("3"));
 		
-		assertFalse(testMap.updateMap(16,"o"));
-		assertEquals(null, testMap.getMap().get("16"));
+		assertFalse(testMap.updateBoard(16,"o"));
+		assertEquals(null, testMap.getBoard().get("16"));
 		
-		assertTrue(testMap.updateMap(11,"o"));
-		assertEquals("o", testMap.getMap().get("11"));
-        assertFalse(testMap.updateMap(11, "x"));
-        assertEquals("o", testMap.getMap().get("11"));
+		assertTrue(testMap.updateBoard(11,"o"));
+		assertEquals("o", testMap.getBoard().get("11"));
+        assertFalse(testMap.updateBoard(11, "x"));
+        assertEquals("o", testMap.getBoard().get("11"));
 	}
 }

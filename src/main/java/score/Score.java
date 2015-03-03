@@ -2,13 +2,13 @@ package score;
 
 import java.util.HashMap;
 
-import map.MapViewer;
+import map.BoardViewer;
 
 public class Score {
 	private int turnCounter;
 	
-	public boolean isWinConditionMet(MapViewer map) {
-        return (tableContainsWin(map.getRowTable(), map.getMapSize()) || tableContainsWin(map.getColTable(), map.getMapSize()) || tableContainsWin(map.getDigTable(), map.getMapSize()));
+	public boolean isWinConditionMet(BoardViewer board) {
+        return (tableContainsWin(board.getRowTable(), board.getBoardSize()) || tableContainsWin(board.getColTable(), board.getBoardSize()) || tableContainsWin(board.getDigTable(), board.getBoardSize()));
 	}
 
     private boolean tableContainsWin(HashMap<String, String[]> table, int mapSize) {
@@ -37,12 +37,7 @@ public class Score {
 
 
     //TODO: test this!
-	public boolean isTie(MapViewer map) {
-		if (turnCounter == (map.getMapSize() * map.getMapSize())) {
-			return true;
-		}
-		else {
-			return false;
-		}
+	public boolean isTie(BoardViewer board) {
+		return (turnCounter == (board.getBoardSize() * board.getBoardSize()));
 	}
 }

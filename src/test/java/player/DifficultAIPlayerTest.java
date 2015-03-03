@@ -2,120 +2,65 @@ package player;
 
 import static org.junit.Assert.*;
 
-import map.Map;
-import map.MapViewer;
+import map.Board;
+import map.BoardViewer;
 
 import org.junit.Test;
+import player.impl.PlayerConsole;
 
 public class DifficultAIPlayerTest {
-	DifficultAIPlayer ai = new DifficultAIPlayer();
-	Map map = new Map();
-	MapViewer mapViewer = new MapViewer();
+	DifficultAIPlayer ai = new DifficultAIPlayer(new PlayerConsole());
+	Board board = new Board();
+	BoardViewer boardViewer = new BoardViewer();
 	
-//	@Test
-//	public void testmakeMove() {
-//		map.initializeMap(3);
-//		mapViewer.setViewedMap(map);
-//		ai.setPersonalSymbol("o");
+	@Test
+	public void testmakeMove() {
+		board.initializeBoard(3);
+		boardViewer.setViewedBoard(board);
+		ai.setPersonalSymbol("o");
 //		
-//		//test for correct horizontal moves
-//		map.updateMap(0, "x");
-//		map.updateMap(1, "x");
-//		assertTrue(ai.makeMove(mapViewer));
-//		assertArrayEquals(new String[] {"x","x","o",
-//										"3","4","5",
-//										"6","7","8"}, map.getMapField());
-//		
-//		map.initializeMap(3);
-//		map.updateMap(7, "x");
-//		map.updateMap(8, "x");
-//		assertTrue(ai.makeMove(mapViewer));
-//		assertArrayEquals(new String[] {"0","1","2",
-//										"3","4","5",
-//										"o","x","x"}, map.getMapField());
-//		
-//		map.initializeMap(3);
-//		map.updateMap(3, "x");
-//		map.updateMap(5, "x");
-//		assertTrue(ai.makeMove(mapViewer));
-//		assertArrayEquals(new String[] {"0","1","2",
-//										"x","o","x",
-//										"6","7","8"}, map.getMapField());
-//		
-//		//test block vertical wins
-//		map.initializeMap(3);
-//		map.updateMap(0, "x");
-//		map.updateMap(3, "x");
-//		assertTrue(ai.makeMove(mapViewer));
-//		assertArrayEquals(new String[] {"x","1","2",
-//										"x","4","5",
-//										"o","7","8"}, map.getMapField());
-//		
-//		map.initializeMap(3);
-//		map.updateMap(4, "x");
-//		map.updateMap(7, "x");
-//		assertTrue(ai.makeMove(mapViewer));
-//		assertArrayEquals(new String[] {"0","o","2",
-//										"3","x","5",
-//										"6","x","8"}, map.getMapField());
-//		
-//		map.initializeMap(3);
-//		map.updateMap(2, "x");
-//		map.updateMap(8, "x");
-//		assertTrue(ai.makeMove(mapViewer));
-//		assertArrayEquals(new String[] {"0","1","x",
-//										"3","4","o",
-//										"6","7","x"}, map.getMapField());
-//		
-//		//test block left diagonal wins
-//		map.initializeMap(3);
-//		map.updateMap(0, "x");
-//		map.updateMap(4, "x");
-//		assertTrue(ai.makeMove(mapViewer));
-//		assertArrayEquals(new String[] {"x","1","2",
-//										"3","x","5",
-//										"6","7","o"}, map.getMapField());
-//		
-//		map.initializeMap(3);
-//		map.updateMap(0, "x");
-//		map.updateMap(8, "x");
-//		assertTrue(ai.makeMove(mapViewer));
-//		assertArrayEquals(new String[] {"x","1","2",
-//										"3","o","5",
-//										"6","7","x"}, map.getMapField());
-//		
-//		map.initializeMap(3);
-//		map.updateMap(4, "x");
-//		map.updateMap(8, "x");
-//		assertTrue(ai.makeMove(mapViewer));
-//		assertArrayEquals(new String[] {"o","1","2",
-//										"3","x","5",
-//										"6","7","x"}, map.getMapField());
-//		
-//		//test block right diagonal wins
-//		map.initializeMap(3);
-//		map.updateMap(2, "x");
-//		map.updateMap(4, "x");
-//		assertTrue(ai.makeMove(mapViewer));
-//		assertArrayEquals(new String[] {"0","1","x",
-//										"3","x","5",
-//										"o","7","8"}, map.getMapField());
-//		
-//		map.initializeMap(3);
-//		map.updateMap(2, "x");
-//		map.updateMap(6, "x");
-//		assertTrue(ai.makeMove(mapViewer));
-//		assertArrayEquals(new String[] {"0","1","x",
-//										"3","o","5",
-//										"x","7","8"}, map.getMapField());
-//		
-//		map.initializeMap(3);
-//		map.updateMap(4, "x");
-//		map.updateMap(6, "x");
-//		assertTrue(ai.makeMove(mapViewer));
-//		assertArrayEquals(new String[] {"0","1","o",
-//										"3","x","5",
-//										"x","7","8"}, map.getMapField());
-//		
-//	}
+//		//test for correct horizontal win moves
+        Move playerO = new Move();
+        playerO.setPlayer("o");
+
+        playerO.setPosition("0");
+        boardViewer.updateBoard(playerO);
+        playerO.setPosition("2");
+        boardViewer.updateBoard(playerO);
+
+        assertTrue(ai.makeMove(boardViewer));
+        assertTrue(boardViewer.getBoard().containsKey("1"));
+
+
+        playerO.setPosition("4");
+        boardViewer.updateBoard(playerO);
+        playerO.setPosition("5");
+        boardViewer.updateBoard(playerO);
+
+        assertTrue(ai.makeMove(boardViewer));
+        assertTrue(boardViewer.getBoard().containsKey("3"));
+
+
+        playerO.setPosition("6");
+        boardViewer.updateBoard(playerO);
+        playerO.setPosition("7");
+        boardViewer.updateBoard(playerO);
+
+        assertTrue(ai.makeMove(boardViewer));
+        assertTrue(boardViewer.getBoard().containsKey("8"));
+
+        //test for correct vertical win moves
+        board.initializeBoard(3);
+        boardViewer.setViewedBoard(board);
+        boardViewer.clearTables();
+
+        playerO.setPosition("5");
+        boardViewer.updateBoard(playerO);
+        playerO.setPosition("8");
+        boardViewer.updateBoard(playerO);
+
+        assertTrue(ai.makeMove(boardViewer));
+        assertTrue(boardViewer.getBoard().containsKey("2"));
+
+	}
 }

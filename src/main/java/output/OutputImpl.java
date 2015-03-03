@@ -3,7 +3,7 @@ package output;
 import java.util.HashMap;
 
 import output.impl.DisplayInterface;
-import map.MapViewer;
+import map.BoardViewer;
 
 /*
  * Implementation of abstract bridge pattern
@@ -14,8 +14,8 @@ public class OutputImpl extends Output {
 		super(displayBridge);
 	}
 
-	public void drawMap(MapViewer map) {
-		int size = map.getMapSize();
+	public void drawBoard(BoardViewer board) {
+		int size = board.getBoardSize();
 		String currentLine = " ";
 		String currentPosition;
 		
@@ -24,7 +24,7 @@ public class OutputImpl extends Output {
 				outputDashedLine(size);
 			}
 			
-			currentPosition = getCurrentPosition(map.getMap(), position);
+			currentPosition = getCurrentPosition(board.getBoard(), position);
 			
 			if (isEndOfLine(position, size)) {
 				currentLine = currentLine + currentPosition + " ";

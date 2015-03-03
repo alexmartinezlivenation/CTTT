@@ -1,6 +1,6 @@
 package output;
 
-import map.MapViewer;
+import map.BoardViewer;
 import output.impl.DisplayInterface;
 
 /*
@@ -21,5 +21,5 @@ public abstract class Output {
 		displayBridge.writeToScreen(text);
 	}
 	
-	abstract public void drawMap(MapViewer map);
+	abstract public void drawBoard(BoardViewer board);
 }
